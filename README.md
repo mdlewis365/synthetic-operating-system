@@ -152,7 +152,7 @@ The goal is to provide meaningful technical visibility while protecting the inte
 synthetic-operating-system/
 │
 ├── README.md
-├── LICENSE.md
+├── LICENSE
 ├── SECURITY.md
 ├── CONTRIBUTING.md
 ├── NOTICE.md
