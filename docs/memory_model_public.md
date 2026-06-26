@@ -1,455 +1,270 @@
 # Public Memory Model
 
-## 1. Purpose
+## Purpose
 
-This document describes the public memory model for Synthetic OS and Carter.
-Carter is the flagship implementation of Synthetic OS, and its memory
-architecture is designed around layered continuity, governed recall, and
-public-safe operational traceability.
+This document describes the public memory model for Synthetic OS and Carter,
+the flagship implementation of the Synthetic OS architecture.
 
-This is not a generic discussion of chatbot memory. It is a public architecture
-disclosure for how Synthetic OS treats memory as an engineered system component
-rather than as an unstructured accumulation of chat history.
+It is grounded only in files present in this repository. The repository is a
+public architecture and documentation repository, not the production source
+tree for Synthetic OS or Carter. It does not contain implementation code,
+private prompts, memory databases, vector stores, raw logs, operational traces,
+or private runtime details.
 
-This repository is a public architecture disclosure repository. It does not
-include production source code, database layouts, storage details, private
-governance prompts, raw logs, user records, or implementation details that would
-allow reconstruction of the private Synthetic OS or Carter system.
+Where this repository does not specify an architecture detail, this document
+states that the detail is not specified.
 
-## 2. Why Memory Exists in Synthetic OS
+## Source Basis
 
-Synthetic OS uses memory because long-running technical work often cannot be
-handled well by a single chat window. Projects evolve across many sessions:
-repository development, engineering decisions, career materials, architecture
-work, research notes, and system design discussions all require continuity.
+This document is based on the public descriptions in:
 
-In Synthetic OS, memory exists to support:
+- `README.md`
+- `docs/architecture_overview.md`
+- `docs/carter_implementation_overview.md`
+- `docs/design_principles.md`
+- `SECURITY.md`
+- `CONTRIBUTING.md`
+- `NOTICE.md`
 
-- Continuity across long-running projects
-- Recall of prior technical context when it is relevant
-- Recovery from session boundaries and conversation length limits
-- Better handling of repository and architecture work over time
-- Reduced repetition for stable user preferences, project facts, and active
-  workstreams
-- More coherent support for career materials, engineering planning, and
-  multi-step technical development
+Those files describe Synthetic OS and Carter at a high level. They support a
+conceptual memory and retrieval model, but they do not disclose the private
+memory implementation.
 
-Memory is not treated as an unquestionable source of truth. Retrieved memory is
-contextual support. It must still be interpreted against the current request,
-the visible conversation, user instructions, safety constraints, and
-governance rules.
+## Public Summary
 
-## 3. Public Memory Architecture
+Synthetic OS is described as an experimental AI systems architecture for
+building governed, memory-enabled, tool-aware AI agents. Carter is described as
+the flagship implementation of that architecture.
 
-At a public level, Carter's memory architecture includes six conceptual areas:
+At the public architecture level, memory is one layer in a broader governed AI
+runtime. It is described as supporting continuity, relevant recall, retrieval
+of prior context, long-running work, and user-governed boundaries. Memory is
+not presented as a standalone authority, a raw transcript archive, or a public
+database.
 
-1. CRM, or Conversation Recovery Module, for short-term conversational
-   continuity.
-2. AMS, or Active Memory System, for long-term durable memory and recall.
-3. DIM, or Data Ingestion Module, for ingestion, filtering, and deduplication.
-4. Retrieval and context assembly, which prepares relevant memory context for
-   the current request.
-5. Governance over memory use, which constrains how memory can influence
-   output.
-6. LCM / OpRep operational reporting, which supports sanitized traceability
-   without disclosing raw logs or private records.
+The public model can be summarized as:
 
-The following diagram is intentionally high-level and public-safe:
+```text
+Current request
+  -> request intake
+  -> context preparation
+  -> memory and retrieval
+  -> reasoning and tool-aware workflow, when applicable
+  -> governance
+  -> response formation
+  -> operational reporting
+  -> user-facing response
+```
+
+This flow is conceptual. The repository does not disclose the production
+control flow, routing logic, storage mechanisms, prompts, model configuration,
+or operational implementation.
+
+## Supported Public Concepts
+
+### Layered Memory
+
+The public documentation states that Synthetic OS includes the concept of
+layered memory. It also describes Carter's memory system as supporting:
+
+- Short-term conversational continuity
+- Long-term recall
+- Retrieval of relevant prior context
+- Memory hygiene
+- Deduplication concepts
+- User-governed memory boundaries
+
+The repository does not define concrete public module names, storage classes,
+schemas, tables, collections, or implementation boundaries for those functions.
+They should therefore be treated as architectural capabilities, not as disclosed
+production components.
+
+### Continuity
+
+Memory is described as a way to support long-running work across interactions.
+Public examples include maintaining project continuity, remembering prior
+decisions when relevant, and reducing the need to restate stable context.
+
+The repository does not specify exactly how short-term continuity is stored,
+expired, ranked, or recovered.
+
+### Retrieval
+
+The public architecture includes a memory and retrieval layer. Retrieval is
+described as finding relevant prior context when it can improve a response.
+
+The repository does not disclose retrieval thresholds, scoring formulas,
+embedding configuration, vector store structure, ranking algorithms, or exact
+context assembly rules.
+
+### Memory Hygiene and Deduplication
+
+The public docs mention memory hygiene and deduplication as concepts. At a
+public level, this means memory should remain useful, bounded, and respectful
+rather than becoming uncontrolled data accumulation.
+
+The repository does not specify the deduplication algorithm, retention policy,
+review workflow, or memory update mechanism used by the private implementation.
+
+### User-Governed Boundaries
+
+The design principles describe memory as controlled, privacy-conscious, and
+respectful of user control. Current user instructions and human review remain
+central to the system's public design.
+
+The repository does not specify the exact user interface, access-control model,
+memory editing workflow, deletion workflow, or administrative controls for
+production memory.
+
+### Governance Before Output
+
+Synthetic OS is described as a governed architecture. Memory and retrieved
+context are part of the system context, but public documentation presents
+governance as a required layer before final response delivery.
+
+At the public level, this means remembered or retrieved context should be
+considered against relevance, privacy, safety, uncertainty, and the current
+user request. The repository does not disclose private governance prompts,
+policy chains, decision trees, or proprietary safety logic.
+
+### Operational Reporting
+
+The public architecture includes operational reporting for traceability,
+debugging, review, and system improvement. The README and architecture docs
+show operational reporting as part of the request lifecycle.
+
+For memory-related work, operational reporting may be described only at a
+sanitized, high level. The repository does not include raw operational reports,
+backend logs, stack traces, private traces, internal job records, local file
+paths, or private user data.
+
+## Conceptual Public Diagram
 
 ```mermaid
 flowchart TD
-    U[Current user request]
-    CRM[CRM short-term continuity]
-    AMS[AMS long-term memory]
-    DIM[DIM ingest, filter, deduplicate]
-    RET[Retrieval and context assembly]
-    GOV[Memory governance]
-    OUT[Final user-facing output]
-    TRACE[LCM / OpRep sanitized traceability]
-
-    U --> CRM
-    U --> RET
-    CRM --> RET
-    DIM --> AMS
-    AMS --> RET
-    RET --> GOV
-    GOV --> OUT
-    GOV --> TRACE
+    A[Current user request] --> B[Request intake]
+    B --> C[Context preparation]
+    C --> D[Memory and retrieval layer]
+    D --> E[Reasoning and tool-aware workflow]
+    E --> F[Governance layer]
+    F --> G[Response formation]
+    G --> H[User-facing response]
+    G --> I[Operational reporting]
+    F --> J[Human review boundary when needed]
 ```
 
-This public model does not disclose schemas, collection names, embedding
-configuration, retrieval thresholds, similarity scores, storage locations,
-prompt chains, internal governance prompts, model-routing behavior, or
-production source code.
+This diagram is a public simplification. It does not represent the private
+production implementation.
 
-## 4. CRM - Conversation Recovery Module
+## Public Memory Behavior
 
-CRM is Carter's short-term continuity layer. Its purpose is to preserve and
-recover the active conversational working state around the current interaction.
+Based on the repository's public documentation, a memory-enabled Carter
+interaction can be described as follows:
 
-At a public level, CRM helps Carter answer questions such as:
+1. A user submits a request.
+2. Carter prepares context for the request.
+3. Relevant memory or prior context may be retrieved when useful.
+4. Tool-aware or structured workflows may be involved when applicable.
+5. Governance is applied before the final response is delivered.
+6. A sanitized operational summary may support review or debugging.
+7. The user receives a governed response.
 
-- What has the user been trying to accomplish in the current workstream?
-- What constraints or preferences have already been established recently?
-- What files, documents, repository areas, or topics have been under active
-  discussion?
-- What unresolved actions, assumptions, or open decisions are still relevant?
+This lifecycle is intentionally high level. The repository does not provide
+enough information to describe exact production sequencing, retries, prompts,
+model routing, storage operations, or validation internals.
 
-CRM is not intended to be the full durable memory of the system. It is closer to
-a continuity layer around the active session or workstream. It helps reduce
-loss of context when a discussion is long, interrupted, or resumed.
+## Sanitized Example
 
-CRM may support:
+The following example is fictional and sanitized.
 
-- Short-term task continuity
-- Recovery after conversation interruption
-- Preservation of active project framing
-- Carryover of immediate constraints and next steps
-- Distinction between current-session facts and older durable memory
+A user returns to a long-running documentation project and asks Carter to update
+a public architecture page. The memory and retrieval layer may help identify
+that the repository is public-facing, that private implementation details must
+not be disclosed, and that documentation should remain concise and
+professional. Governance then constrains the response so it avoids private
+prompts, raw logs, memory data, credentials, deployment details, or proprietary
+orchestration logic.
 
-CRM does not grant Carter autonomous authority. It does not make memory
-infallible, and it does not override direct user instructions.
+This example illustrates the public concept only. It does not disclose real
+memory contents, real user data, production prompts, private operational
+reports, or implementation logic.
 
-## 5. AMS - Active Memory System
+## Explicitly Not Specified
 
-AMS is Carter's long-term memory layer. Its purpose is durable recall of
-relevant context across sessions and projects.
+The following memory architecture details are not specified in this repository:
 
-At a public level, AMS supports memory for:
+- Concrete memory module names
+- Database schemas or table layouts
+- Vector store structure
+- Collection names
+- Embedding models or embedding configuration
+- Retrieval thresholds or similarity scores
+- Ranking algorithms
+- Prompt chains or hidden directives
+- Memory write, update, deletion, or retention workflows
+- Ingestion pipelines
+- Access-control implementation
+- Production logging formats
+- Operational report schemas
+- Model routing behavior
+- Deployment topology
+- Internal Carter runtime logic
 
-- Long-running repository development
-- Technical architecture discussions
-- Repeated engineering workflows
-- Career materials and professional documents
-- User-stated preferences and stable context
-- System design notes and project history
-- Reusable summaries of prior decisions, when appropriate
+Any future public documentation that discusses these topics should either stay
+conceptual or be reviewed by the maintainer for public release.
 
-AMS is not a raw transcript archive. Publicly, it should be understood as a
-durable memory and recall layer that can supply relevant context when the
-current request benefits from prior project or user context.
+## Public / Private Boundary
 
-AMS memory is bounded. It should be used only when relevant, safe, privacy
-appropriate, and consistent with user control. It should not be treated as
-perfect recall, a source of autonomous decision-making authority, or a
-substitute for human review.
+This document may describe:
 
-The long-term layer exists because many useful facts are too persistent for a
-single conversation but too contextual to belong in static documentation. Carter
-uses AMS to help bridge that gap at the architecture level.
+- High-level memory concepts
+- Public architecture layers
+- Sanitized examples
+- Public design principles
+- Public privacy and governance expectations
 
-## 6. DIM - Data Ingestion Module
+This document must not include:
 
-DIM is the public architectural concept for ingestion, filtering, and
-deduplication before information becomes useful memory.
-
-At a high level, DIM exists because not every piece of conversation or project
-data should become durable memory. Some information may be redundant,
-temporary, private, irrelevant, unsafe to retain, or superseded by newer
-context.
-
-DIM can be described publicly as the layer that helps answer:
-
-- Is this information appropriate to consider for memory?
-- Is it relevant beyond the immediate exchange?
-- Is it duplicative of existing memory?
-- Is it stale, conflicting, or superseded?
-- Should it be retained, summarized, ignored, or handled only transiently?
-
-DIM is not disclosed here as source code, a database pipeline, an embedding
-configuration, or a rule table. The public point is architectural: Synthetic OS
-does not treat memory as a direct dump of conversation text. Information passes
-through an ingest and deduplication concept before it can function as durable
-memory support.
-
-```mermaid
-flowchart LR
-    A[Candidate information]
-    B[Relevance check]
-    C[Privacy and safety check]
-    D[Deduplication]
-    E[Memory candidate]
-    F[Do not retain or retain only transiently]
-
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    B --> F
-    C --> F
-```
-
-This diagram is conceptual only. It does not represent private control flow,
-internal prompts, thresholds, database writes, or implementation logic.
-
-## 7. Retrieval and Context Assembly
-
-Memory retrieval is the process of finding potentially relevant memory and
-assembling it into usable context for the current request.
-
-Retrieval is not the same as final reasoning. It is an upstream support step.
-The retrieved material must still be evaluated, constrained, and integrated
-with the current task.
-
-At a public level, retrieval and context assembly are responsible for:
-
-- Identifying memory that may be relevant to the current request
-- Separating short-term continuity from long-term recall
-- Assembling a concise context package
-- Avoiding unnecessary or unrelated memory injection
-- Preserving the priority of current user instructions
-- Supporting task continuity without overwhelming the response
-
-The output of retrieval should be treated as contextual evidence, not as
-unquestionable truth. Memory may be incomplete, outdated, superseded, or
-irrelevant to the current user intent. Carter's architecture therefore treats
-retrieval as a support layer that must pass through governance before it
-influences final output.
-
-## 8. Governance of Memory Use
-
-Memory use is governed before it influences final output. This is a central
-design point in Synthetic OS.
-
-At a public level, memory governance asks:
-
-- Is the memory relevant to the current request?
-- Is the memory safe to use in this context?
-- Is the memory consistent with current user instructions?
-- Does the memory create privacy risk?
-- Could the memory be stale, ambiguous, or contradicted by the current
-  conversation?
-- Should the system disclose uncertainty or ask for clarification?
-- Should the memory be ignored for this response?
-
-Governance is necessary because memory can improve continuity but can also
-introduce risk. A remembered detail can be wrong, outdated, private, or
-misapplied. Carter is therefore designed so memory is bounded by privacy,
-relevance, safety, and user control.
-
-Publicly, this repository discloses the existence and purpose of memory
-governance. It does not disclose internal governance prompts, private directive
-sets, evaluator logic, scoring methods, prompt chains, or implementation
-details.
-
-## 9. Operational Reporting and Memory Traceability
-
-Synthetic OS includes operational reporting and logging concepts through
-LCM / OpRep. In the public memory model, these concepts support sanitized
-traceability around system behavior.
-
-At a public level, operational traceability may help describe:
-
-- That memory-assisted processing occurred
-- Which public architectural layer was involved
-- Whether context was treated as short-term continuity or long-term recall
-- Whether governance was applied before final output
-- Whether a public-safe summary of the operation can be reviewed
-
-Raw operational records are not disclosed. Public documentation must not expose
-raw OpReps, logs, conversation records, private user memories, file paths,
-storage locations, secrets, API keys, internal prompts, or production source
-code.
-
-The public role of LCM / OpRep is traceability in sanitized form. It is not a
-public log dump and not a disclosure of private operational internals.
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Carter
-    participant Memory as CRM / AMS
-    participant Governance
-    participant Trace as LCM / OpRep
-
-    User->>Carter: Current request
-    Carter->>Memory: Request relevant context
-    Memory-->>Carter: Candidate context
-    Carter->>Governance: Evaluate memory use
-    Governance-->>Carter: Allowed, limited, or rejected context
-    Carter->>User: Final response
-    Governance->>Trace: Sanitized operational note
-```
-
-The sequence diagram shows the public concept only. It does not disclose private
-message formats, exact control flow, prompt content, model routing, or storage
-mechanisms.
-
-## 10. User Control and Privacy
-
-Memory in Synthetic OS is bounded by user control and privacy. The system should
-support continuity without converting every interaction into permanent context
-and without treating private information as public documentation.
-
-At a public architecture level, this means:
-
-- Current user instructions take priority over remembered context.
-- Sensitive or private information should not be exposed in public outputs.
-- Memory should be relevant to the task being handled.
-- Memory should not be used to surprise the user with unrelated recall.
-- Users should be able to correct, supersede, or constrain remembered context.
-- Public documentation must use sanitized examples rather than real user
-  records.
-
-Carter's memory model is intended to support the user, not to create an
-independent authority over the user. Memory assists continuity, but the user
-remains the controlling party for goals, corrections, constraints, and final
-review.
-
-## 11. Memory Hygiene
-
-Memory hygiene is the practice of keeping memory useful, bounded, and
-appropriate over time.
-
-At a public level, memory hygiene includes:
-
-- Avoiding unnecessary retention of transient details
-- Deduplicating repeated facts or summaries
-- Treating superseded information as lower confidence
-- Distinguishing durable project facts from temporary working assumptions
-- Avoiding broad recall when narrow context is sufficient
-- Keeping sensitive material out of public examples
-- Preserving uncertainty when memory is incomplete or stale
-
-Memory hygiene is one reason Synthetic OS separates CRM, AMS, DIM, retrieval,
-governance, and operational traceability. Each layer has a different role, and
-that separation helps prevent memory from becoming an unbounded transcript or a
-single opaque store of recalled text.
-
-## 12. What This Repository Does Not Disclose
-
-This public repository does not disclose:
-
-- Database schemas
-- Table layouts
-- Vector collection details
-- Embedding configuration
-- Retrieval thresholds
-- Similarity scores
-- Prompt chains
-- Internal governance prompts
-- Full directive sets
-- Private user memories
-- Real conversation records
-- Raw OpReps
-- Logs
-- File paths
-- API keys
-- Secrets
 - Production source code
-- Internal implementation logic
-- Exact storage locations
-- Model-routing behavior
+- Private prompts
+- Internal memory records
+- Memory database contents
+- Vector store contents
+- Raw conversations
+- Raw operational logs
+- Private operational reports
+- Credentials or environment files
+- Local paths or infrastructure details
+- Proprietary orchestration logic
+- Private governance logic
+- User conversation data
 
-These exclusions are intentional. The repository is meant to demonstrate the
-public architecture of Synthetic OS and Carter without revealing proprietary
-implementation details.
+This boundary is part of the repository's purpose: to make the public
+architecture understandable without exposing proprietary Synthetic OS or Carter
+internals.
 
-## 13. Sanitized Example
+## Non-Goals
 
-The following example is fictional and sanitized. It illustrates the public
-memory model without exposing private records or implementation details.
+The public memory model is not:
 
-### Scenario
-
-A user has been working with Carter on a long-running repository documentation
-project. Across several sessions, the user has established that the repository
-is public-facing, should not expose private source code, and should communicate
-architecture in a professional tone for engineering reviewers.
-
-### Memory behavior
-
-CRM may help preserve the immediate working state:
-
-- The current document being edited
-- The requested public-safe tone
-- The latest section structure
-- The instruction not to disclose private internals
-
-AMS may provide longer-term context:
-
-- The repository is an architecture disclosure repository
-- Carter is the flagship implementation of Synthetic OS
-- Public documentation should distinguish architecture from production source
-  release
-- Prior documents use sanitized examples and clear exclusion lists
-
-DIM may prevent poor memory formation:
-
-- A repeated instruction is recognized as duplicative
-- A temporary draft phrase is not treated as durable project truth
-- Private implementation details are not retained as public documentation
-
-Retrieval and context assembly may prepare a compact context package:
-
-- Relevant repository purpose
-- Current documentation objective
-- Public/private boundary reminders
-- Previously established tone
-
-Governance then constrains use of that context:
-
-- Do not disclose raw logs
-- Do not reveal private prompts or storage details
-- Treat recalled project context as support, not as authority
-- Follow the current user request if it supersedes prior memory
-
-LCM / OpRep may record a sanitized operational note that memory-governed
-documentation work occurred. It must not disclose raw logs, private memory
-contents, exact storage details, or real conversation records.
-
-## 14. Design Principles
-
-Carter's public memory model is based on the following principles:
-
-- Layered continuity: short-term continuity and long-term recall are different
-  architectural functions.
-- Relevance first: memory should be used only when it helps the current task.
-- Governed use: retrieved memory must be evaluated before influencing output.
-- User control: current user instructions and corrections take priority.
-- Privacy by boundary: private records, logs, prompts, and implementation
-  details are not public artifacts.
-- Traceability without exposure: operational reporting should support
-  accountability in sanitized form.
-- Human review: memory-supported outputs still require user review,
-  engineering validation, and domain judgment.
-- Public-safe disclosure: architecture can be explained without releasing
-  source code or sensitive operational details.
-
-## 15. Non-Goals
-
-Carter's memory system is not presented as:
-
-- Artificial general intelligence
-- Consciousness or sentience
-- Perfect recall
-- Guaranteed factual correctness
-- Guaranteed safety
-- Autonomous authority over the user
-- A replacement for engineering review
-- A substitute for source control, documentation, or formal records
-- A public release of production internals
+- A production implementation guide
+- A database specification
+- A prompt library
+- A memory export format
 - A transcript archive
-- A disclosure of private user data
+- A deployment guide
+- A claim of perfect recall
+- A guarantee of factual correctness
+- A replacement for human review
+- A disclosure of proprietary Carter internals
 
-The memory system is an engineered continuity and recall architecture. It is
-designed to support better long-running work, not to remove the need for human
-direction, review, and correction.
+## Summary
 
-## 16. Summary
+The repository supports a public memory model in which Synthetic OS and Carter
+use governed memory and retrieval to improve continuity, recall relevant prior
+context, support long-running work, and preserve human-centered boundaries.
 
-Synthetic OS uses layered memory because serious technical work often spans
-many sessions, documents, repositories, and decisions. Carter, as the flagship
-implementation of Synthetic OS, uses CRM for short-term conversational
-continuity, AMS for long-term durable memory and recall, DIM for ingestion and
-deduplication, retrieval and context assembly for relevant task support,
-governance for bounded memory use, and LCM / OpRep concepts for sanitized
-operational traceability.
-
-The public memory model is intentionally specific enough to show an engineered
-architecture, but it does not reveal proprietary implementation details.
-Retrieved memory supports the current request; it does not become
-unquestionable truth. Memory is bounded by privacy, relevance, safety, and user
-control.
-
-This is the public memory model for Synthetic OS and Carter.
+The public documentation does not disclose how the private memory system is
+implemented. Architecture details such as schemas, storage systems, scoring
+rules, prompts, routing behavior, and operational internals remain unspecified
+and private.
