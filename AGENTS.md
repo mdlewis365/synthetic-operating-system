@@ -1,26 +1,16 @@
-# AGENTS.md
+# Agent Instructions
 
-## Repository purpose
+This repository is public documentation only.
 
-This repository is the public-facing Synthetic Operating System (SOS) repository. It must explain high-level concepts, public documentation, and safe examples only.
+## Editing Rules
 
-## Proprietary information guardrails
+- Keep all changes public-safe.
+- Do not add source code or implementation snippets from the private Carter/Synthetic OS codebase.
+- Do not expose private prompt text, route names, function names, file paths, schemas, secrets, logs, model-routing internals, or raw user data.
+- Do not invent implemented modules. If the private codebase does not show an active module, describe it only as conceptual or omit it.
+- Preserve the wording that Carter is the flagship implementation of Synthetic OS.
+- Preserve human-review and safety limitations in user-facing docs.
 
-- Do not disclose private SOS implementation details.
-- Do not invent modules, files, APIs, or architecture that are not present in the repository.
-- Do not expose private prompts, internal Carter runtime logic, hidden governance rules, private memory implementation details, credentials, local paths, tokens, logs, or non-public design decisions.
-- When unsure, mark the detail as unknown or ask the maintainer to verify.
+## What Is Not Included
 
-## Work style
-
-- Inspect the actual repository before writing architecture documentation.
-- Prefer concise, public-consumption language.
-- Keep claims grounded in files that exist.
-- Do not add secrets or environment files.
-- Run available checks before finalizing changes.
-
-## Git workflow
-
-- Make small focused changes.
-- Show diffs before suggesting a commit.
-- Use clear commit messages.
+Agent edits must not include private code, private prompts, credentials, operational artifacts, raw memories, database details, deployment details, authentication logic, or proprietary governance logic.
