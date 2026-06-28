@@ -12,10 +12,6 @@ The current implementation supports Carter, SIS, EAS, memory/retrieval layers, d
 - Document new modules only after implementation is verified.
 - Keep private prompt and governance internals out of public repositories.
 
-## Not Current
-
-DIM is not documented as active because the current inspected codebase did not show an active DIM implementation.
-
 ## What Is Not Included
 
 This roadmap does not disclose private engineering backlog, proprietary module designs, deployment plans, credentials, source code, prompt drafts, model-routing plans, or unimplemented architecture as current fact.
