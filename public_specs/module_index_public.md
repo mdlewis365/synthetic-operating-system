@@ -16,10 +16,6 @@
 | SIS | Synthetic Ideation System | Implemented workflow |
 | EAS | Engineering Assistance System | Implemented workflow |
 
-## Conceptual or Not Documented as Active
-
-DIM is not listed as an active module because the inspected implementation did not show active DIM behavior.
-
 ## What Is Not Included
 
 This index does not publish private module internals, source filenames, function names, prompt labels, schemas, routes, or cloneable implementation details.
