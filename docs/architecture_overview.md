@@ -34,7 +34,3 @@ The current implemented system can be publicly described as:
 ## What Is Not Included
 
 This overview does not include private prompts, implementation paths, route names, function names, authentication logic, model-routing internals, storage schemas, retrieval thresholds, raw logs, raw memories, raw OpReps, or deployment details.
-
-## DIM Status
-
-No active DIM module was found in the inspected implementation. DIM is therefore not documented as part of the current public architecture.
