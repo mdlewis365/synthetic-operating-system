@@ -51,3 +51,7 @@ Synthetic OS output is decision support. It is not autonomous authority, a guara
 ## Status
 
 This documentation reflects the current private Carter/Synthetic OS implementation observed during the June 2026 public documentation staging pass.
+
+## Verification Without Source Code
+
+Because the production implementation is proprietary, this repository verifies the system through architecture docs, sanitized examples, validation traces, screenshots, and public-safe workflow descriptions.
